@@ -1,17 +1,30 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <SingleCard
+    v-bind:CardInfo="{
+      name: 'Blaustoise',
+      hp: 50,
+      type: 'Water',
+      image: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/shiny/1.png',
+      number: 3,
+      height: 30,
+      weight: 50,
+      attacks: 'Literally a wall of text that will be fetched by the api',
+    }"
+  />
+  <AtroposTesting />
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import SingleCard from "./components/SingleCard.vue";
+import AtroposTesting from "./components/AtroposTesting.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    HelloWorld
-  }
-}
+    SingleCard,
+    AtroposTesting,
+  },
+};
 </script>
 
 <style>
