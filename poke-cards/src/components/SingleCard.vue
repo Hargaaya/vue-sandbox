@@ -1,49 +1,69 @@
 <template>
-  <div class="card-container">
-    <header>
-      <h3>{{ CardInfo.name }}</h3>
-      <p>{{ CardInfo.hp }} hp</p>
-      <p>{{ CardInfo.type }}</p>
-    </header>
-
-    <div class="card-body">
-      <div class="image-container">
-        <img :src="CardInfo.image" :alt="CardInfo.name" />
+  <atropos class="my-atropos">
+    <div class="card-container">
+      <header>
+        <h3>{{ CardInfo.name }}</h3>
         <span>
-          <p>NO: {{ CardInfo.number }}</p>
-          <p>Height: {{ CardInfo.height }}</p>
-          <p>Weight: {{ CardInfo.weight }}</p>
+          <p><bold>HP </bold>{{ CardInfo.hp }}</p>
+          <i class="fa fa-tree"></i>
+        </span>
+      </header>
+
+      <div class="card-body">
+        <div class="image-container">
+          <img :src="CardInfo.image" :alt="CardInfo.name" />
+          <span>
+            <p>NO: {{ CardInfo.number }}</p>
+            <p>Height: {{ CardInfo.height }}</p>
+            <p>Weight: {{ CardInfo.weight }}</p>
+          </span>
+        </div>
+
+        <span class="attacks-container">
+          <h2>Attacks</h2>
+          <p>{{ CardInfo.attacks }}</p>
         </span>
       </div>
-
-      <span class="attacks-container">
-        <h2>Attacks</h2>
-        <p>{{ CardInfo.attacks }}</p>
-      </span>
     </div>
-  </div>
+  </atropos>
 </template>
 <script>
+import Atropos from "atropos/vue";
+
 export default {
   name: "SingleCard",
   props: {
     CardInfo: Object,
   },
+  components: { Atropos },
 };
 </script>
-<style>
-.card-container {
-  @apply bg-green-300 border-8 border-yellow-400 flex flex-col rounded-2xl;
+
+<style scoped>
+.my-atropos {
   height: 600px;
   width: 400px;
 }
 
-header {
-  @apply flex flex-row justify-between m-3;
+.card-container {
+  @apply bg-green-300 border-8 border-yellow-400 flex flex-col rounded-2xl
+  select-none w-full h-full;
 }
 
-header h3 {
-  @apply font-bold;
+header {
+  @apply flex flex-row justify-between items-center h-10 mt-1 mx-5 font-bold;
+}
+
+header span {
+  @apply flex w-24 justify-around items-center;
+}
+
+header i {
+  @apply w-8 h-8 p-1.5 rounded-full shadow-lg bg-green-200;
+}
+
+header p > * {
+  @apply font-bold text-xs;
 }
 
 .image-container {

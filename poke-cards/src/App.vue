@@ -1,5 +1,6 @@
 <template>
   <SingleCard
+    class="card"
     v-bind:CardInfo="{
       name: 'Blaustoise',
       hp: 50,
@@ -11,18 +12,15 @@
       attacks: 'Literally a wall of text that will be fetched by the api',
     }"
   />
-  <AtroposTesting />
 </template>
 
 <script>
 import SingleCard from "./components/SingleCard.vue";
-import AtroposTesting from "./components/AtroposTesting.vue";
 
 export default {
   name: "App",
   components: {
     SingleCard,
-    AtroposTesting,
   },
 };
 </script>
@@ -35,5 +33,9 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+.card {
+  @apply mx-auto my-20;
 }
 </style>
