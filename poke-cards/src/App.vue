@@ -1,26 +1,39 @@
 <template>
-  <SingleCard
-    class="card"
-    v-bind:CardInfo="{
-      name: 'Blaustoise',
-      hp: 50,
-      type: 'Water',
-      image: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/shiny/1.png',
-      number: 3,
-      height: 30,
-      weight: 50,
-      attacks: 'Literally a wall of text that will be fetched by the api',
-    }"
-  />
+  <SingleCard v-if="this.loaded" class="card" v-bind:PokemonInformation="pokemonInformation" />
 </template>
 
 <script>
 import SingleCard from "./components/SingleCard.vue";
+import axios from "axios";
+
+let pokeUrl = new URL("https://pokeapi.co/api/v2");
+pokeUrl.pathname += "/pokemon";
+pokeUrl.pathname += "/25";
 
 export default {
   name: "App",
   components: {
     SingleCard,
+  },
+  data() {
+    return {
+      pokemonInformation: [],
+      loaded: false,
+    };
+  },
+  methods: {
+    fetchData() {
+      axios
+        .get(pokeUrl)
+        .then((res) => {
+          this.pokemonInformation = res.data;
+          this.loaded = true;
+        })
+        .catch((err) => console.log("http error message: " + err));
+    },
+  },
+  created() {
+    this.fetchData();
   },
 };
 </script>
@@ -31,7 +44,6 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
   margin-top: 60px;
 }
 
