@@ -11,7 +11,7 @@
 
       <div class="card-body">
         <div class="image-container" data-atropos-offset="3">
-          <img :src="PokemonInformation.sprites.other.home.front_default" :alt="PokemonInformation.name" data-atropos-offset="3" />
+          <img :src="PokemonInformation.sprites.other.home.front_default" :alt="PokemonInformation.name" data-atropos-offset="5" />
           <span>
             <p>NO: {{ PokemonInformation.id }}</p>
             <p>HT: {{ PokemonInformation.height }}</p>
@@ -19,16 +19,17 @@
           </span>
         </div>
 
-        <div class="attacks-container">
+        <div v-if="abilityLoaded" class="attacks-container">
           <h2>Attacks</h2>
           <p>{{ PokemonInformation.abilites }}</p>
-          <ul v-for="ability in PokemonInformation.abilities" v-bind:key="ability.id">
-            <li>
-              <h3>{{ ability.ability.name }}</h3>
-              <a :href="ability.ability.url">Link</a>
+          <ul>
+            <li v-for="item in this.abilities" v-bind:key="item.id">
+              <h3>{{ item.name }}</h3>
+              <p>{{ item.text }}</p>
             </li>
           </ul>
         </div>
+
         <span v-for="type in PokemonInformation.types" :key="type.id">
           <h3>{{ type.type.name }}</h3>
         </span>
@@ -36,6 +37,7 @@
     </div>
   </atropos>
 </template>
+
 <script>
 import Atropos from "atropos/vue";
 import axios from "axios";
@@ -49,29 +51,24 @@ export default {
   data() {
     return {
       abilities: [],
+      abilityLoaded: false,
     };
   },
-  method: {
-    getAbilities() {
-      this.PokemonInformation.abilites.forEach((ability) => {
-        console.log(ability.url);
-      });
-    },
-    rnd: function () {
-      return Math.floor(Math.random() * 4);
-    },
-
-    fetchAbility(url) {
-      axios
-        .get(url)
-        .then((res) => {
-          this.abilities += res.data;
-        })
-        .catch((err) => console.log("MASSIVE ERROR!!! (REAL) (NOT FAKE)" + err));
-    },
-  },
-  created() {
+  mounted() {
     console.log(this.PokemonInformation);
+
+    this.PokemonInformation.abilities.forEach((item) => {
+      axios.get(item.ability.url).then((res) => {
+        let data = res.data.effect_entries.filter((obj) => obj.language.name == "en");
+        let ability = {};
+
+        ability.name = item.ability.name;
+        ability.text = data[0].effect.split(".")[0];
+
+        this.abilities.push(ability);
+        this.abilityLoaded = true;
+      });
+    });
   },
 };
 </script>
@@ -136,5 +133,9 @@ header p > * {
 
 .attacks-container h3 {
   @apply font-light;
+}
+
+.attacks-container p {
+  @apply text-xs;
 }
 </style>
