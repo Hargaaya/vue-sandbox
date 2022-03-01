@@ -1,7 +1,7 @@
 <template>
   <div class="search-container">
     <h3>Search</h3>
-    <input type="text" name="search" id="search" placeholder="ex. Blaustoise" @change="$emit('onSearch', $event.target.value)" />
+    <input type="text" placeholder="ex. Blastoise" @change="$emit('onSearch', $event.target.value)" />
   </div>
 </template>
 <script>
@@ -11,7 +11,7 @@ export default {
 </script>
 <style scoped>
 .search-container {
-  @apply bg-gray-50 rounded-2xl w-96 h-24 border-2 border-gray-200
+  @apply bg-gray-50 rounded-2xl w-96 h-24 border-2 border-red-400
     mx-auto text-center font-bold text-gray-400 shadow-sm
     flex flex-col items-center justify-center;
 }

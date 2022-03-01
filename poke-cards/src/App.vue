@@ -10,9 +10,8 @@ import SingleCard from "./components/SingleCard.vue";
 import Search from "./components/Search.vue";
 import axios from "axios";
 
-let pokeUrl = new URL("https://pokeapi.co/api/v2");
-pokeUrl.pathname += "/pokemon";
-pokeUrl.pathname += "/25";
+const pokeUrl = new URL("https://pokeapi.co/api/v2");
+pokeUrl.pathname += "/pokemon/";
 
 export default {
   name: "App",
@@ -27,22 +26,27 @@ export default {
     };
   },
   methods: {
-    onSearch(e) {
-      console.log(e);
+    onSearch(pokemonName) {
+      this.fetchData(pokemonName.toLowerCase());
     },
 
-    fetchData() {
+    fetchData(pokemon) {
       axios
-        .get(pokeUrl)
+        .get(pokeUrl + pokemon)
         .then((res) => {
           this.pokemonInformation = res.data;
           this.loaded = true;
         })
-        .catch((err) => console.log("http error message: " + err));
+        .catch((err) => this.failedFetch(err));
+    },
+
+    failedFetch(msg) {
+      alert("That pokemon does not exist :(");
+      console.log("Message: " + msg);
     },
   },
   created() {
-    this.fetchData();
+    this.fetchData("pikachu");
   },
 };
 </script>
