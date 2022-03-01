@@ -132,7 +132,7 @@ header p > * {
 }
 
 .attacks-container h3 {
-  @apply font-light;
+  @apply font-bold text-center w-full;
 }
 
 .attacks-container p {

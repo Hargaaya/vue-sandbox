@@ -1,9 +1,13 @@
 <template>
-  <SingleCard v-if="this.loaded" class="card" v-bind:PokemonInformation="pokemonInformation" />
+  <div>
+    <Search @onSearch="onSearch" />
+    <SingleCard v-if="this.loaded" class="card" v-bind:PokemonInformation="pokemonInformation" />
+  </div>
 </template>
 
 <script>
 import SingleCard from "./components/SingleCard.vue";
+import Search from "./components/Search.vue";
 import axios from "axios";
 
 let pokeUrl = new URL("https://pokeapi.co/api/v2");
@@ -14,6 +18,7 @@ export default {
   name: "App",
   components: {
     SingleCard,
+    Search,
   },
   data() {
     return {
@@ -22,6 +27,10 @@ export default {
     };
   },
   methods: {
+    onSearch(e) {
+      console.log(e);
+    },
+
     fetchData() {
       axios
         .get(pokeUrl)
