@@ -11,7 +11,11 @@
 
       <div class="card-body">
         <div class="image-container" data-atropos-offset="3">
-          <img :src="PokemonInformation.sprites.other.home.front_default" :alt="PokemonInformation.name" data-atropos-offset="5" />
+          <img
+            :src="PokemonInformation.sprites.other.home.front_default"
+            :alt="'An image of ' + PokemonInformation.name"
+            data-atropos-offset="5"
+          />
           <span>
             <p>NO: {{ PokemonInformation.id }}</p>
             <p>HT: {{ PokemonInformation.height }}</p>
@@ -19,8 +23,8 @@
           </span>
         </div>
 
-        <div v-if="abilityLoaded" class="attacks-container">
-          <h2>Attacks</h2>
+        <div v-if="abilityLoaded" class="abilities-container">
+          <h2>Abilities</h2>
           <p>{{ PokemonInformation.abilites }}</p>
           <ul>
             <li v-for="item in this.abilities" v-bind:key="item.id">
@@ -54,21 +58,33 @@ export default {
       abilityLoaded: false,
     };
   },
+  watch: {
+    PokemonInformation: function () {
+      console.log("prop has changed!");
+      this.updateAbility();
+    },
+  },
   mounted() {
-    console.log(this.PokemonInformation);
+    console.log("mounted");
+    this.updateAbility();
+  },
+  methods: {
+    updateAbility() {
+      this.abilities = [];
 
-    this.PokemonInformation.abilities.forEach((item) => {
-      axios.get(item.ability.url).then((res) => {
-        let data = res.data.effect_entries.filter((obj) => obj.language.name == "en");
-        let ability = {};
+      this.PokemonInformation.abilities.forEach((item) => {
+        axios.get(item.ability.url).then((res) => {
+          let data = res.data.effect_entries.filter((obj) => obj.language.name == "en");
+          let ability = {};
 
-        ability.name = item.ability.name;
-        ability.text = data[0].effect.split(".")[0];
+          ability.name = item.ability.name;
+          ability.text = data[0].effect.split(".")[0];
 
-        this.abilities.push(ability);
-        this.abilityLoaded = true;
+          this.abilities.push(ability);
+          this.abilityLoaded = true;
+        });
       });
-    });
+    },
   },
 };
 </script>
@@ -119,23 +135,23 @@ header p > * {
   bg-gradient-to-bl from-gray-400 to-white;
 }
 
-.attacks-container {
+.abilities-container {
   @apply px-5;
 }
 
-.attacks-container h2 {
+.abilities-container h2 {
   @apply text-left font-bold text-lg py-2;
 }
 
-.attacks-container li {
+.abilities-container li {
   @apply flex flex-row flex-wrap justify-between py-2;
 }
 
-.attacks-container h3 {
+.abilities-container h3 {
   @apply font-bold text-center w-full;
 }
 
-.attacks-container p {
+.abilities-container p {
   @apply text-xs;
 }
 </style>
