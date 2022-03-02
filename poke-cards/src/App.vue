@@ -41,8 +41,9 @@ export default {
     },
 
     failedFetch(msg) {
-      alert("That pokemon does not exist :(");
-      console.log("Message: " + msg);
+      msg;
+      //alert("That pokemon does not exist :(");
+      //console.log("Message: " + msg);
     },
   },
   created() {
