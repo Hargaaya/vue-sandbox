@@ -45,6 +45,7 @@
 <script>
 import Atropos from "atropos/vue";
 import axios from "axios";
+import Colors from "fast-average-color";
 
 export default {
   name: "SingleCard",
@@ -62,13 +63,24 @@ export default {
     PokemonInformation: function () {
       console.log("prop has changed!");
       this.updateAbility();
+      this.updateColors();
     },
   },
   mounted() {
     console.log("mounted");
     this.updateAbility();
+    this.updateColors();
   },
   methods: {
+    updateColors() {
+      new Colors()
+        .getColorAsync(this.PokemonInformation.sprites.other.home.front_default)
+        .then((color) => {
+          document.querySelector(".card-container").style.backgroundColor = color.hex;
+        })
+        .catch((err) => console.log(err));
+    },
+
     updateAbility() {
       this.abilities = [];
 
@@ -96,7 +108,7 @@ export default {
 }
 
 .card-container {
-  @apply bg-yellow-500 border-8 border-yellow-400 flex flex-col rounded-2xl
+  @apply border-8 border-yellow-400 flex flex-col rounded-2xl
   select-none w-full h-full;
   background-image: url("https://www.transparenttextures.com/patterns/clean-gray-paper.png");
 }
@@ -119,7 +131,7 @@ header p > * {
 
 .image-container {
   @apply border-4 border-gray-400 mx-auto mt-5 mb-10 flex flex-col justify-center items-center;
-  background-image: url("https://media2.giphy.com/media/xT0xeuC4g0tJu17YSA/giphy.gif?cid=ecf05e47sgv6ibmwve4jlllysublpri5n8qtcurnll8ivw6f&rid=giphy.gif&ct=g");
+  background-image: url("https://media2.giphy.com/media/TM8Fu4TrgkNSmXh5cw/giphy.gif?cid=ecf05e47ulmw29k70cms7qdcbkgplaao3nqfqlfkaeufuag3&rid=giphy.gif&ct=g");
   background-size: cover;
   background-position: center;
   height: 200px;
@@ -155,3 +167,12 @@ header p > * {
   @apply text-xs;
 }
 </style>
+
+/** - - Future backgrounds - -
+https://media2.giphy.com/media/dB66K4Kywc8gPVh6A7/giphy.gif?cid=ecf05e47hbgh7xcagu8hvlaeehpj803bqudtiqhq2wiuwn7h&rid=giphy.gif&ct=g BLUE
+https://media2.giphy.com/media/xT0xeuC4g0tJu17YSA/giphy.gif?cid=ecf05e47sgv6ibmwve4jlllysublpri5n8qtcurnll8ivw6f&rid=giphy.gif&ct=g YELLOW
+https://media4.giphy.com/media/YqhIK6Gbor6CLeloBq/giphy.gif?cid=ecf05e47hkdtil2q088l3g8lvp5zk43htantb6t76s7w7m4u&rid=giphy.gif&ct=g PURPLE
+https://media4.giphy.com/media/ZZSY833SbfSorRzpGY/giphy.gif?cid=ecf05e47ox6egga33iafwzie2j4zwl0hckptnzj94wf1gm9g&rid=giphy.gif&ct=g RED
+https://media1.giphy.com/media/fYBLMOMuyghpOpCpdY/giphy.gif?cid=ecf05e471n24a6d6v37wrtzqbcqw1uvtqcnnmciqzs9uijso&rid=giphy.gif&ct=g COLOR
+https://media3.giphy.com/media/cw5i0cXBLVyff8Oax7/giphy.gif?cid=ecf05e47mvyjaaz6k4g67rwsm3m077575mpmz6iazkfvu58s&rid=giphy.gif&ct=g GREEN
+**/
