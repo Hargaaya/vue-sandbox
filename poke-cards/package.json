@@ -13,6 +13,7 @@
     "autoprefixer": "^9",
     "axios": "^0.26.0",
     "core-js": "^3.8.3",
+    "fast-average-color": "^7.1.0",
     "party-js": "^2.1.2",
     "postcss": "^7",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.17",
