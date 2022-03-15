@@ -1,9 +1,9 @@
 <template>
   <div class="search-container">
-    <input v-if="ListLoaded" type="text" placeholder="Search" @input="filterList" />
+    <input v-if="ListLoaded" type="text" placeholder="Search" @input="filterList" v-on:click="show" />
     <ul class="search-list">
       <li v-for="item in filteredList" :key="item.id" @click="$emit('onSearch', $event.target.innerText)">
-        {{ item.name }}
+        <p v-on:click="clear">{{ item.name }}</p>
       </li>
     </ul>
   </div>
@@ -36,6 +36,14 @@ export default {
       this.filteredList = res.splice(0, 10);
       if (value.length == 0) this.filteredList = [];
     },
+    clear: function (e) {
+      e.path[3].firstChild.value = "";
+      e.path[2].style.display = "none";
+    },
+    show: function () {
+      this.filteredList = [];
+      document.querySelector(".search-list").style.display = "";
+    },
   },
   mounted() {
     this.fetchPokemonList();
@@ -58,7 +66,7 @@ input {
 }
 
 .search-list li {
-  @apply text-sm border-b-2 border-gray-300 p-2 overflow-hidden z-50 bg-gray-50 w-72
-  capitalize;
+  @apply text-sm p-2 overflow-hidden z-50 bg-gray-50 w-72
+  capitalize cursor-pointer hover:bg-gray-200;
 }
 </style>
