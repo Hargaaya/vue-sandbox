@@ -1,11 +1,11 @@
 <template>
   <atropos class="atropos-container">
     <div class="card-container" data-atropos-offset="0">
-      <header>
+      <header data-atropos-offset="2">
         <h3>{{ PokemonInformation.name }}</h3>
         <span>
           <p><b>HP</b> {{ PokemonInformation.stats[0].base_stat }}</p>
-          <i class="fa fa-bolt"></i>
+          <i class="fa fa-bolt globe-bg"></i>
         </span>
       </header>
 
@@ -17,26 +17,24 @@
             data-atropos-offset="5"
           />
           <span>
-            <p>NO: {{ PokemonInformation.id }}</p>
+            <p>NO. {{ PokemonInformation.id }}</p>
             <p>HT: {{ PokemonInformation.height }}</p>
             <p>WT: {{ PokemonInformation.weight }}</p>
           </span>
         </div>
 
-        <div v-if="abilityLoaded" class="abilities-container">
-          <h2>Abilities</h2>
-          <p>{{ PokemonInformation.abilites }}</p>
+        <div v-if="movesLoaded" class="moves-container" data-atropos-offset="2">
           <ul>
-            <li v-for="item in this.abilities" v-bind:key="item.id">
-              <h3>{{ item.name }}</h3>
-              <p>{{ item.text }}</p>
+            <li v-for="item in this.moves" v-bind:key="item.id">
+              <span>
+                <i class="fa fa-bolt globe-bg"></i>
+                <h3>{{ item.name }}</h3>
+                <b> {{ item.power }}</b>
+              </span>
+              <p>{{ item.effect }}</p>
             </li>
           </ul>
         </div>
-
-        <span v-for="type in PokemonInformation.types" :key="type.id">
-          <h3>{{ type.type.name }}</h3>
-        </span>
       </div>
     </div>
   </atropos>
@@ -55,20 +53,18 @@ export default {
   components: { Atropos },
   data() {
     return {
-      abilities: [],
-      abilityLoaded: false,
+      moves: [],
+      movesLoaded: false,
     };
   },
   watch: {
     PokemonInformation: function () {
-      console.log("prop has changed!");
-      this.updateAbility();
+      this.updateMoves();
       this.updateColors();
     },
   },
   mounted() {
-    console.log("mounted");
-    this.updateAbility();
+    this.updateMoves();
     this.updateColors();
   },
   methods: {
@@ -77,25 +73,34 @@ export default {
         .getColorAsync(this.PokemonInformation.sprites.other.home.front_default)
         .then((color) => {
           document.querySelector(".card-container").style.backgroundColor = color.hex;
+          document.querySelectorAll("fa").forEach((item) => {
+            item.style.color = color.hex;
+          });
         })
         .catch((err) => console.log(err));
     },
 
-    updateAbility() {
-      this.abilities = [];
+    updateMoves() {
+      this.moves = [];
 
-      this.PokemonInformation.abilities.forEach((item) => {
-        axios.get(item.ability.url).then((res) => {
-          let data = res.data.effect_entries.filter((obj) => obj.language.name == "en");
-          let ability = {};
+      let numberOfMoves = this.PokemonInformation.moves.length;
 
-          ability.name = item.ability.name;
-          ability.text = data[0].effect.split(".")[0];
+      for (let i = 0; i < 2; i++) {
+        let item = this.PokemonInformation.moves;
+        let j = Math.floor(numberOfMoves / 4 + i);
 
-          this.abilities.push(ability);
-          this.abilityLoaded = true;
+        axios.get(item[j].move.url).then((res) => {
+          let data = res.data;
+          let move = {};
+
+          move.name = item[j].move.name.replace("-", " ");
+          move.effect = data.flavor_text_entries.filter((obj) => obj.language.name == "en")[4].flavor_text;
+          move.power = data.power;
+
+          this.moves.push(move);
+          this.movesLoaded = true;
         });
-      });
+      }
     },
   },
 };
@@ -107,22 +112,33 @@ export default {
   width: 400px;
 }
 
+h3 {
+  @apply capitalize font-semibold;
+}
+
 .card-container {
   @apply border-8 border-yellow-400 flex flex-col rounded-2xl
-  select-none w-full h-full;
+  select-none w-full h-full overflow-hidden;
   background-image: url("https://www.transparenttextures.com/patterns/clean-gray-paper.png");
+  filter: saturate(1.2);
+}
+
+.card-container:hover {
+  background-image: url("https://www.transparenttextures.com/patterns/clean-gray-paper.png"), url(../assets/sparkles.gif);
+  background-blend-mode: color-dodge;
+  filter: contrast(1);
 }
 
 header {
-  @apply flex flex-row justify-between items-center h-10 mt-1 mx-5 font-bold;
+  @apply flex flex-row justify-between items-center h-10 mt-2 mx-5 font-bold;
+}
+
+header h3 {
+  @apply font-bold;
 }
 
 header span {
   @apply flex w-24 justify-around items-center;
-}
-
-header i {
-  @apply w-8 h-8 p-1.5 rounded-full border border-black;
 }
 
 header p > * {
@@ -130,41 +146,39 @@ header p > * {
 }
 
 .image-container {
-  @apply border-4 border-gray-400 mx-auto mt-5 mb-10 flex flex-col justify-center items-center;
+  @apply border-4 border-gray-400 mx-auto mt-2 mb-10 flex flex-col justify-center items-center;
   background-image: url("https://media2.giphy.com/media/TM8Fu4TrgkNSmXh5cw/giphy.gif?cid=ecf05e47ulmw29k70cms7qdcbkgplaao3nqfqlfkaeufuag3&rid=giphy.gif&ct=g");
   background-size: cover;
   background-position: center;
   height: 200px;
-  width: 300px;
+  width: 90%;
 }
 
 .image-container img {
-  @apply h-40 w-40;
+  @apply h-40 w-40 z-10;
 }
 
 .image-container span {
-  @apply flex justify-evenly rounded-full w-80 mt-6 font-bold italic text-sm
-  bg-gradient-to-bl from-gray-400 to-white;
+  @apply flex justify-evenly transform skew-x-12 w-80 mt-6 italic text-xs
+  shadow-inner border-2 border-gray-400 bg-gradient-to-t from-gray-400 to-gray-100;
 }
 
-.abilities-container {
+.moves-container {
   @apply px-5;
 }
 
-.abilities-container h2 {
-  @apply text-left font-bold text-lg py-2;
+.moves-container span {
+  @apply flex flex-row justify-between;
+}
+.moves-container p {
+  @apply text-left text-sm pb-1.5;
 }
 
-.abilities-container li {
-  @apply flex flex-row flex-wrap justify-between py-2;
-}
-
-.abilities-container h3 {
-  @apply font-bold text-center w-full;
-}
-
-.abilities-container p {
-  @apply text-xs;
+.globe-bg {
+  @apply w-7 h-7 p-1.5 rounded-full;
+  filter: contrast(4);
+  box-shadow: inset -7px -4px 12px rgba(0, 0, 0, 0.3);
+  background-image: linear-gradient(-45deg, rgba(255, 255, 220, 0.3) 0%, transparent 100%);
 }
 </style>
 

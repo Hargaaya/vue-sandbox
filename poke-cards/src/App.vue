@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <Search @onSearch="onSearch" />
     <SingleCard v-if="this.loaded" class="card" v-bind:PokemonInformation="pokemonInformation" />
   </div>
@@ -54,11 +54,15 @@ export default {
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Open Sans", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   margin-top: 60px;
+}
+
+.container {
+  @apply flex flex-col justify-center items-center;
 }
 
 .card {

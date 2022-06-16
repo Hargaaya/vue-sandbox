@@ -1,6 +1,6 @@
 <template>
   <div class="search-container">
-    <input v-if="ListLoaded" type="text" placeholder="Search" @input="filterList" v-on:click="show" />
+    <input v-if="ListLoaded" type="text" placeholder="Ex. Pikachu, Squirtle" @input="filterList" v-on:click="show" />
     <ul class="search-list">
       <li v-for="item in filteredList" :key="item.id" @click="$emit('onSearch', $event.target.innerText)">
         <p v-on:click="clear">{{ item.name }}</p>
@@ -52,21 +52,29 @@ export default {
 </script>
 <style scoped>
 .search-container {
-  @apply w-80 h-14 mx-auto;
+  @apply w-96 h-14 mx-auto rounded-lg z-50;
+}
+
+input:focus {
+  box-shadow: 0 0 0 max(100vh, 100vw) rgba(0, 0, 0, 0.6);
 }
 
 input {
-  @apply w-72 rounded-xl p-2 m-2 outline-none bg-transparent text-white
-   shadow-inner mx-auto border-8 border-white placeholder-white
+  @apply w-full h-full rounded-lg p-3 outline-none bg-white text-gray-700
+   shadow-md mx-auto placeholder-gray-500
    font-bold text-center;
 }
 
 .search-list {
-  @apply flex flex-col rounded-2xl w-72 mx-auto overflow-hidden;
+  @apply w-full flex flex-col rounded-lg overflow-hidden mt-2 shadow-md;
 }
 
 .search-list li {
-  @apply text-sm p-2 overflow-hidden z-50 bg-gray-50 w-72
+  @apply w-full text-sm overflow-hidden z-50 bg-white
   capitalize cursor-pointer hover:bg-gray-200;
+}
+
+.search-list p {
+  @apply p-3 font-bold;
 }
 </style>
