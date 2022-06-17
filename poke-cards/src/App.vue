@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <Search @onSearch="onSearch" />
+    <Search class="searchbar" @onSearch="onSearch" />
     <SingleCard v-if="this.loaded" class="card" v-bind:PokemonInformation="pokemonInformation" />
   </div>
 </template>
@@ -58,14 +58,9 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  margin-top: 60px;
 }
 
 .container {
-  @apply flex flex-col justify-center items-center;
-}
-
-.card {
-  @apply mx-auto my-20;
+  @apply flex flex-col mx-auto w-screen h-screen;
 }
 </style>

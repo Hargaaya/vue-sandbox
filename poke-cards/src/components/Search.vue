@@ -32,7 +32,7 @@ export default {
     },
     filterList(e) {
       let value = e.target.value;
-      let res = this.ListOfPokemons.filter((item) => item.name.slice(0, value.length) == value);
+      let res = this.ListOfPokemons.filter((item) => item.name.slice(0, value.length) == value).filter((item) => !item.name.includes("-"));
       this.filteredList = res.splice(0, 10);
       if (value.length == 0) this.filteredList = [];
     },
@@ -53,6 +53,8 @@ export default {
 <style scoped>
 .search-container {
   @apply w-96 h-14 mx-auto rounded-lg z-50;
+  margin-top: 7%;
+  max-width: 80%;
 }
 
 input:focus {
@@ -62,7 +64,7 @@ input:focus {
 input {
   @apply w-full h-full rounded-lg p-3 outline-none bg-white text-gray-700
    shadow-md mx-auto placeholder-gray-500
-   font-bold text-center;
+   font-bold text-center text-lg;
 }
 
 .search-list {
@@ -70,11 +72,11 @@ input {
 }
 
 .search-list li {
-  @apply w-full text-sm overflow-hidden z-50 bg-white
+  @apply w-full text-sm overflow-hidden z-10 bg-white
   capitalize cursor-pointer hover:bg-gray-200;
 }
 
 .search-list p {
-  @apply p-3 font-bold;
+  @apply p-2 font-bold;
 }
 </style>
